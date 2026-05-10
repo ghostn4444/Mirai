@@ -1,7 +1,71 @@
-# Mirai — Dependências
-# A maioria das funcionalidades usa apenas stdlib
-# scapy é opcional (para raw sockets avançados)
-# pyinstaller é opcional (para compilar bot)
+# Mirai-PTBR v1.0 — Dependências
+# 
+# Notas:
+# - Maioria das funcionalidades usa apenas stdlib do Python 3.8+
+# - Dependências abaixo são OPCIONAIS mas recomendadas para full functionality
+# 
+# Instalação:
+#   pip install -r requirements.txt
+#
+# Stdlib que usamos (já inclusos no Python):
+#   - asyncio (CNC server)
+#   - socket (raw sockets para ataques)
+#   - threading (bot, scanner)
+#   - json, struct, logging, argparse, pathlib
+#   - concurrent.futures (ThreadPoolExecutor no scanner)
+
+# ═══════════════════════════════════════════════════════════════════════════
+# RECOMENDADAS (para raw sockets avançados em ataques SYN/ACK/DNS)
+# ═══════════════════════════════════════════════════════════════════════════
 
 scapy>=2.4.5
-pyinstaller>=5.0
+    # Construção de pacotes IP/TCP/UDP de baixo nível
+    # Usado em: syn.py, dns.py, greip.py
+    # Sem scapy: fallback para socket.AF_INET_RAW (requer root)
+    # pip install scapy
+
+# ═══════════════════════════════════════════════════════════════════════════
+# OPCIONAIS (compilação e deployement)
+# ═══════════════════════════════════════════════════════════════════════════
+
+# pyinstaller>=5.0
+#     # Compilação de bot em binário executável (ARM, MIPS, x86_64)
+#     # Usado em: loader/payload_builder.py
+#     # Sem pyinstaller: rodar bot como script Python
+#     # pip install pyinstaller
+
+# pycryptodome>=3.17.0
+#     # Criptografia avançada (RC4, AES, etc)
+#     # Usado em: tools/enc.py para ofuscação RC4
+#     # Sem pycryptodome: usar apenas XOR e Base64
+#     # pip install pycryptodome
+
+# requests>=2.28.0
+#     # HTTP requests simplificado (usado em HTTP flood)
+#     # Sem requests: usar socket.AF_INET direto
+#     # pip install requests
+
+# ═══════════════════════════════════════════════════════════════════════════
+# DESENVOLVIMENTO (testes, linting, etc)
+# ═══════════════════════════════════════════════════════════════════════════
+
+# pytest>=7.0
+#     # Framework de testes
+#     # pip install pytest
+
+# black>=22.0
+#     # Formatação de código
+#     # pip install black
+
+# pylint>=2.13
+#     # Linting de código
+#     # pip install pylint
+
+# ═══════════════════════════════════════════════════════════════════════════
+# INSTALAÇÃO RÁPIDA (tudo em um comando)
+# ═══════════════════════════════════════════════════════════════════════════
+# 
+# pip install -r requirements.txt
+#
+# Ou apenas o essencial (raw sockets):
+# pip install scapy

