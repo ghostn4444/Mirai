@@ -1,0 +1,7 @@
+# Mirai — Dependências
+# A maioria das funcionalidades usa apenas stdlib
+# scapy é opcional (para raw sockets avançados)
+# pyinstaller é opcional (para compilar bot)
+
+scapy>=2.4.5
+pyinstaller>=5.0
